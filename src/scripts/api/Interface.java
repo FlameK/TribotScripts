@@ -7,6 +7,8 @@ import org.tribot.api2007.types.RSInterfaceComponent;
 
 public class Interface {
 
+    // Excetionally bad code here. Will rewrite to create two checks and merge with InterfaceHelper
+
     //Control Interface Options
     // Checks to see if the Control Interface is open and enables a clickable interface
     public static RSInterfaceComponent controlsInterfaceOpen() {
