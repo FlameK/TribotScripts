@@ -9,8 +9,7 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSInterfaceChild;
 import org.tribot.api2007.types.RSItem;
-import scripts.MudRuneMaker.Antiban.Antiban;
-import scripts.MudRuneMaker.data.Vars;
+import scripts.api.antiban.Antiban;
 import scripts.dax_api.api_lib.DaxWalker;
 import scripts.dax_api.api_lib.models.RunescapeBank;
 

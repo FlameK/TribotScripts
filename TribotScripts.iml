@@ -318,7 +318,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/AppData/Roaming/.tribot/dependancies/TRiBot-10.25.5.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Roaming/.tribot/dependancies/TRiBot-10.24.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
