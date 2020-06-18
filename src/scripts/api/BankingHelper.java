@@ -34,7 +34,7 @@ public class BankingHelper {
     }
 
     // closes the bank with the escape option
-    public static void closeBankWithEscape() {
+    public static boolean closeBankWithEscape() {
         if (Banking.isBankScreenOpen() && Banking.isBankLoaded()) {
             Keyboard.sendPress(KeyEvent.CHAR_UNDEFINED, KeyEvent.VK_ESCAPE);
             General.println(bankHelperText + "Attempting to close bank with escape key.");
@@ -43,6 +43,7 @@ public class BankingHelper {
                 return !Banking.isBankScreenOpen();
             }, General.random(5000, 6000));
         }
+        return false;
     }
 
     public static boolean isNotedOn() {
