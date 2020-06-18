@@ -18,6 +18,8 @@ import java.util.List;
 
 public class ClanChatHelper {
 
+    // No longer needed, will remove in future
+
     private final static RSInterface clan = Interfaces.get(589);
     private final static RSInterfaceChild clanList = Interfaces.get(589, 5);
 
