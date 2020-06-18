@@ -139,4 +139,11 @@ public class BankingHelper {
         }
         return false;
     }
+
+    /**
+     * Ideas for more banking features:
+     * Withdraw noted (quantity and name)
+     * Deposit items (amount, name, antiban measure etc)
+     * Withdraw items (amount, name, noted or not, antiban measures etc)
+     */
 }
