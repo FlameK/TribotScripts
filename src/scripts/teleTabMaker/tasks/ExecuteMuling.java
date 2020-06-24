@@ -19,8 +19,12 @@ import scripts.teleTabMaker.data.UserSettings;
 import scripts.teleTabMaker.framework.Priority;
 import scripts.teleTabMaker.framework.Task;
 
+import static scripts.api.discordMessageHelper.sendDiscordMessage;
+
+
 public class ExecuteMuling implements Task {
 
+    public int totalCoins = 0;
 
     @Override
     public Priority priority() {
@@ -113,6 +117,11 @@ public class ExecuteMuling implements Task {
                         }
                         break;
                 }
+
+            case TRADE_MULE:
+
+                sendDiscordMessage("Successfully completed muling with +" + Player.getRSPlayer().getName() +
+                        "The total amount of gold received from the trade was: " + totalCoins);
 
         }
 

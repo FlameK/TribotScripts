@@ -30,7 +30,9 @@ public class BankingHelper {
         return bankingHelper == null ? bankingHelper = new BankingHelper() : bankingHelper;
     }
 
-    // closes the bank with the escape option
+    /** closes the bank with the escape option
+     * @return
+     */
     public static boolean closeBankWithEscape() {
         if (Banking.isBankScreenOpen() && Banking.isBankLoaded()) {
             Keyboard.sendPress(KeyEvent.CHAR_UNDEFINED, KeyEvent.VK_ESCAPE);
@@ -43,6 +45,9 @@ public class BankingHelper {
         return false;
     }
 
+    /** checks to see if the withdraw as noted option is enabled
+     * @return
+     */
     public static boolean isNotedOn() {
         if (Banking.isBankScreenOpen()) {
             RSInterface itemInterfaceChild = Interfaces.get(BANK_MASTER_ID, WITHDRAW_AS_ITEM_BACKGROUND_ID, 0);
@@ -53,6 +58,11 @@ public class BankingHelper {
         return false;
     }
 
+    /**
+     * If noted is not enabled and returns false, use this to enabled withdraw as noted
+     * @param noted
+     * @return
+     */
     public static boolean setNoted(boolean noted) {
         if (Banking.isBankScreenOpen()) {
             if (noted && !isNotedOn()) {
@@ -79,6 +89,11 @@ public class BankingHelper {
         return false;
     }
 
+    /**
+     * Equips an item in players inventory while the bank is open, uses ABC interaction delays.
+     * @param itemName
+     * @return
+     */
     public static boolean equipItemWithBankOpen(String itemName) {
 
         RSItem[] i = Inventory.find(itemName);
@@ -86,7 +101,7 @@ public class BankingHelper {
 
             if (i != null && i.length > 0) {
                 General.println(bankHelperText + "Attempting to equip: " + itemName);
-                if (i[0].click("Wear")) {
+                if (i[0].click("Wear") || i[0].click("Wield")) {
                     Antiban.waitItemInteractionDelay();
                     Timing.waitCondition(() -> {
                         General.sleep(General.randomSD(regularSleep, regularSD));
@@ -99,12 +114,18 @@ public class BankingHelper {
         return false;
     }
 
-    public static boolean drinkStaminaPotionWithBankOpenAndDeposit(String itemName) {
-        RSItem[] i = Inventory.find(itemName);
-        int staminaVarbit = 0;
+    /**
+     * Drinks one does of stamina potion and then deposits it in the bank.
+     * @param
+     * @return
+     */
+    public static boolean drinkStaminaPotionWithBankOpenAndDeposit() {
+        String[] staminaPotion = {"Stamina potion(1)", "Stamina potion(2)", "Stamina potion(3)", "Stamina potion(4)"};
+        RSItem[] i = Inventory.find(staminaPotion);
+        int staminaVarbit = 25;
         int staminaPotionInEffect = 1;
         int staminaPotionNoEffect = 0;
-        int amount = Inventory.getCount(itemName);
+        int amount = Inventory.getCount(staminaPotion);
 
         if (Banking.isBankScreenOpen() && Game.getVarBit(staminaVarbit) == staminaPotionNoEffect) {
             if (i[0].click("Drink")) {
@@ -118,9 +139,19 @@ public class BankingHelper {
         else if (Game.getVarBit(staminaVarbit) == staminaPotionInEffect) {
             General.println(bankHelperText + "Stamina potion is already activated, attempting to deposit item");
         }
-        depositItem(amount, itemName);
+        if (Inventory.find(staminaPotion).length > 0) {
+            depositItem(-1,staminaPotion[0]);
+        }
+
         return false;
     }
+
+    /**
+     * Deposits a set amount of a specific item into the bank, utilising ABC interaction delays
+     * @param amount
+     * @param itemName
+     * @return
+     */
 
     public static boolean depositItem(int amount, String itemName) {
         RSItem[] i = Inventory.find(itemName);
@@ -141,9 +172,48 @@ public class BankingHelper {
     }
 
     /**
+     * Withdraws an item from the bank in noted form. To withdraw all items set amount to -1.
+     */
+
+    public static boolean withdrawNoted(int amount, String itemName) {
+
+        if (Banking.isBankScreenOpen() && Banking.isBankLoaded()) {
+            if (!isNotedOn()) {
+                General.println(bankHelperText + "Withdraw as noted is not enabled, enabling withdraw as noted.");
+                setNoted(true);
+            }
+
+            int startCount = Inventory.getCount(itemName);
+
+            if (amount == -1) {
+                General.println(bankHelperText + "Attempting to withdraw all of item " + itemName);
+                if (Banking.withdraw(0, itemName)) {
+                    Antiban.waitItemInteractionDelay();
+                    Timing.waitCondition(() -> {
+                        General.sleep(General.randomSD(regularSleep, regularSD));
+                        return Inventory.getCount(itemName) > startCount;
+                    }, General.random(3000, 4000));
+                }
+            } else if (amount != -1) {
+                General.println(bankHelperText + "Attempting to withdraw " + itemName + "as noted form");
+                if (Banking.withdraw(amount, itemName)) {
+                    Antiban.waitItemInteractionDelay();
+                    Timing.waitCondition(() -> {
+                        General.sleep(General.randomSD(regularSleep, regularSD));
+                        return Inventory.getCount(itemName) > startCount;
+                    }, General.random(3000, 4000));
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * Ideas for more banking features:
      * Withdraw noted (quantity and name)
      * Deposit items (amount, name, antiban measure etc)
      * Withdraw items (amount, name, noted or not, antiban measures etc)
+     * Withdraw potion, always withdraw the lowest one first.
      */
 }
