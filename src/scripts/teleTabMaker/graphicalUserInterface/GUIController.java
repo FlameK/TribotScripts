@@ -38,17 +38,17 @@ public class GUIController extends AbstractGUIController {
         //Setting the host preference
         String nameOfHost = hostName.getText();
         General.println("The host name is: " + nameOfHost);
-        UserSettings.hostName = nameOfHost;
+        UserSettings.HOST_NAME = nameOfHost;
 
         //Setting the mule Name
         if (muleToHostTick.isSelected()) {
             String nameOfMule = hostName.getText();
             General.println("The name of the mule is: " + nameOfMule);
-            UserSettings.muleName = nameOfMule;
+            UserSettings.MULE_NAME = nameOfMule;
         } else {
             String nameOfMule = muleName.getText();
             General.println("The mule is not the host. The mule you're using is: " + nameOfMule);
-            UserSettings.muleName = nameOfMule;
+            UserSettings.MULE_NAME = nameOfMule;
         }
 
         //Setting the restocking preferences

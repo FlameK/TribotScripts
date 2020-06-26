@@ -82,7 +82,7 @@ public class ExecuteMuling implements Task {
                                             } else if (!Interface.lastUsedFriendsHouse().getText().contains("PlatinumR0se")) {
                                                 General.println("Host name does not match required name, entering new host name.");
                                                 General.println("Typing in hosts name.");
-                                                Keyboard.typeString(UserSettings.hostName);
+                                                Keyboard.typeString(UserSettings.HOST_NAME);
                                                 Keyboard.pressEnter();
                                                 Timing.waitCondition(() -> {
                                                     General.sleep(General.randomSD(1500, 75));
@@ -98,7 +98,7 @@ public class ExecuteMuling implements Task {
                                                 }, General.random(2000, 3000));
                                             }
                                             General.println("Typing in hosts name.");
-                                            Keyboard.typeString(UserSettings.hostName);
+                                            Keyboard.typeString(UserSettings.HOST_NAME);
                                             Keyboard.pressEnter();
                                             Timing.waitCondition(() -> {
                                                 General.sleep(General.randomSD(1500, 60));
