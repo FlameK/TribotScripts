@@ -19,11 +19,11 @@ import scripts.teleTabMaker.antiban.Antiban;
 import scripts.teleTabMaker.antiban.PersistantABCUtil;
 import scripts.teleTabMaker.data.MyDaxCredentials;
 import scripts.teleTabMaker.data.PriceCalculations;
+import scripts.teleTabMaker.data.UserSettings;
 import scripts.teleTabMaker.data.Vars;
 import scripts.teleTabMaker.framework.Task;
 import scripts.teleTabMaker.graphicalUserInterface.GUI;
 import scripts.teleTabMaker.tasks.ExecuteMakingTabs;
-import scripts.teleTabMaker.tasks.ExecuteRestocking;
 import scripts.teleTabMaker.tasks.ExecuteReturningToHouse;
 import scripts.teleTabMaker.tasks.ExecuteUnnotingClay;
 
@@ -43,8 +43,6 @@ public class Main extends Script implements Painting, Arguments {
     public static int startTeleportTabCount = 0;
     Font font = new Font("Verdana", Font.PLAIN, 12);
 
-    public String MULE_NAME = "";
-    public String TAB_TO_MAKE = "Teleport to house";
 
     private URL fxml;
     private GUI gui;
@@ -181,9 +179,9 @@ public class Main extends Script implements Painting, Arguments {
             for(String arg:input.split(";")){
                 try{
                     if(arg.startsWith("tablet")){
-                        TAB_TO_MAKE = arg.split(":")[1];
+                        UserSettings.TAB_TO_MAKE = arg.split(":")[1];
                     } else if(arg.startsWith("mule")){
-                        MULE_NAME = arg.split(":")[1];
+                        UserSettings.MULE_NAME = arg.split(":")[1];
                     }
                 } catch(Exception e){
                     println("Error in arguments. Please define in the following order: 'tablet:tabletName';'mule:muleName'.");
