@@ -8,6 +8,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
+import org.tribot.script.interfaces.Arguments;
 import org.tribot.script.interfaces.Painting;
 
 import scripts.dax_api.api_lib.DaxWalker;
@@ -32,14 +33,18 @@ import java.awt.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @ScriptManifest(category = "Money Making", name = "Elliott's HouseTabber", authors = "Elliott")
-public class Main extends Script implements Painting {
+public class Main extends Script implements Painting, Arguments {
 
     private ArrayList<Task> tasks = new ArrayList<>();
     private long startTime;
     public static int startTeleportTabCount = 0;
-    Font font = new Font("Verdana", Font.PLAIN,12);
+    Font font = new Font("Verdana", Font.PLAIN, 12);
+
+    public String MULE_NAME = "";
+    public String TAB_TO_MAKE = "Teleport to house";
 
     private URL fxml;
     private GUI gui;
@@ -95,23 +100,23 @@ public class Main extends Script implements Painting {
 
         addTasks();
 
-        while (Vars.get().shouldRun){
+        while (Vars.get().shouldRun) {
 
-        handleTasks();
+            handleTasks();
+        }
+
     }
 
-}
-
-    private void addTasks(){
+    private void addTasks() {
 
         tasks.add(new ExecuteMakingTabs());
         tasks.add(new ExecuteUnnotingClay());
         tasks.add(new ExecuteReturningToHouse());
     }
 
-    private void handleTasks(){
-        for (Task t : tasks){
-            if (t.validate()){
+    private void handleTasks() {
+        for (Task t : tasks) {
+            if (t.validate()) {
                 Vars.get().status = t.toString();
                 t.execute();
                 General.sleep(100, 250);
@@ -120,7 +125,7 @@ public class Main extends Script implements Painting {
         }
     }
 
-    public static void stopScript(String reason){
+    public static void stopScript(String reason) {
         General.println("Script stopped : " + reason);
         Vars.get().shouldRun = false;
         Antiban.destroy();
@@ -146,7 +151,7 @@ public class Main extends Script implements Painting {
         int coinsUsed = ExecuteUnnotingClay.coinsUsed;
         int totalCostOfCoins = PriceCalculations.costOfCoins * coinsUsed;
 
-        int totalCosts =  totalCostOfLawRunes + totalCostOfSoftClay + totalCostOfCoins;
+        int totalCosts = totalCostOfLawRunes + totalCostOfSoftClay + totalCostOfCoins;
         int profitGained = (totalCostOfTabs) - totalCosts;
         int profitPerHour = (int) (profitGained * (3600000 / timeRan));
 
@@ -157,14 +162,33 @@ public class Main extends Script implements Painting {
         g.setFont(font);
 
         g.drawString("Elliott's Tab Maker Version 1", 10, 250);
-        g.drawString("Version:  1.01" , 10, 265);
+        g.drawString("Version:  1.01", 10, 265);
         g.drawString("Task: " + Vars.get().status, 10, 280);
         g.drawString("Runtime: " + Timing.msToString(this.getRunningTime()), 10, 295);
         g.drawString("Tabs Made: " + tabsMade + " (" + tabsPerHour + ")", 10, 310);
-        g.drawString("Profit: " + profitGained + "(" + profitPerHour + ")", 10 , 325);
+        g.drawString("Profit: " + profitGained + "(" + profitPerHour + ")", 10, 325);
 
         Point mP = Mouse.getPos();
         g.drawLine(mP.x, 0, mP.x, 500);
         g.drawLine(0, mP.y, 800, mP.y);
     }
+
+    @Override
+    public void passArguments(HashMap<String, String> arg0) {
+        String scriptSelect = arg0.get("custom_input");
+        String clientStarter = arg0.get("autostart");
+        String input = clientStarter != null ? clientStarter : scriptSelect;
+            for(String arg:input.split(";")){
+                try{
+                    if(arg.startsWith("tablet")){
+                        TAB_TO_MAKE = arg.split(":")[1];
+                    } else if(arg.startsWith("mule")){
+                        MULE_NAME = arg.split(":")[1];
+                    }
+                } catch(Exception e){
+                    println("Error in arguments. Please define in the following order: 'tablet:tabletName';'mule:muleName'.");
+                }
+            }
+        }
 }
+
